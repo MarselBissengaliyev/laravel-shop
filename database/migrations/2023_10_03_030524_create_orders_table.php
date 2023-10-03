@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('number');
-            $table->string('status');
+            $table->string('status')->default('progress');
             $table->integer('user_id');
-            $table->integer('product_id');
+            $table->json('products');
             $table->timestamps();
         });
     }
