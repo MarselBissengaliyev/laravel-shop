@@ -9,11 +9,12 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $filable = [
+    protected  $fillable  = [
         'name', 'description', 'price', 'picture_url', 'user_id'
     ];
 
-    public function Author() {
+    public function author()
+    {
         return $this->belongsTo(User::class);
     }
 }
