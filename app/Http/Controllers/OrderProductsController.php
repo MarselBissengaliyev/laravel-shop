@@ -7,23 +7,15 @@ use Illuminate\Http\Request;
 class OrderProductsController extends Controller
 {
     //
-    public function GetProducts() {
+    public function GetOrderProducts() {
 
     }
 
-    public function GetProductById(int $productId) {
+    public function CreateOrderProduct(Request $request) {
 
     }
 
-    public function CreateProduct(Request $request) {
-
-    }
-
-    public function UpdateProductById(Request $request, int $productId) {
-
-    }
-
-    public function DeleteProductById(int $productId) {
+    public function DeleteOrderProductById(int $productId) {
 
     }
 }
