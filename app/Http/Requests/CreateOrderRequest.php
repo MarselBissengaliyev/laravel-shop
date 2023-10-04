@@ -27,20 +27,4 @@ class CreateOrderRequest extends FormRequest
             'products' => 'required|array',
         ];
     }
-
-    public function failedValidation(Validator $validator)
-    {
-        $errors = $validator->errors()->messages();
-        $parsedErrors = [];
-
-        foreach ($errors as $key => $error) {
-            $parsedErrors[$key] = $error[0];
-        }
-
-        throw new HttpResponseException(response()->json([
-            'status' => 'failed',
-            'errors' => $parsedErrors,
-            'message' => 'error occured while validating request body',
-        ], 400 ));
-    }
 }

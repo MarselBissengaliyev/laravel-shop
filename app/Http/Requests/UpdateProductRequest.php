@@ -26,24 +26,8 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => 'required|min:2|max:50',
             'description' => 'required|min:8|max:150',
-            'price' => 'required',
-            'picture_url' => 'required',
+            'price' => 'required|numeric|min:0.01|max:9999999999.99',
+            'picture_url' => 'required|url|max:500',
         ];
-    }
-
-    public function failedValidation(Validator $validator)
-    {
-        $errors = $validator->errors()->messages();
-        $parsedErrors = [];
-
-        foreach ($errors as $key => $error) {
-            $parsedErrors[$key] = $error[0];
-        }
-
-        throw new HttpResponseException(response()->json([
-            'status' => 'failed',
-            'errors' => $parsedErrors,
-            'message' => 'error occured while validating request body',
-        ], 400 ));
     }
 }
