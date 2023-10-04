@@ -15,6 +15,9 @@ class IsCustomer
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (auth()->user()->role != "customer") {
+            return redirect()->route('auth.show.login');
+        }
         return $next($request);
     }
 }

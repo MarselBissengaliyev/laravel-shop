@@ -16,10 +16,7 @@ class IsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->user()->role != "admin") {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'You do not have admin access'
-            ], 403);
+            return redirect()->route('auth.show.login');
         }
         
         return $next($request);
