@@ -46,79 +46,44 @@ class ProductController extends Controller
 
     public function CreateProduct(CreateProductRequest $request)
     {
-        try {
-            $validated = $request->validated();
+        $validated = $request->validated();
 
-            $product = Product::create([
-                'name' => $validated['name'],
-                'description' => $validated['description'],
-                'price' => $validated['price'],
-                'picture_url' => $validated['picture_url'],
-                'user_id' => auth()->id()
-            ]);
+        Product::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'picture_url' => $validated['picture_url'],
+            'user_id' => auth()->id()
+        ]);
 
-            return response()->json([
-                'status' => 'success',
-                'data' => $product,
-                'message' => 'product successfully created',
-            ], 200);
-        } catch (\Throwable $th) {
-            throw new HttpResponseException(response()->json([
-                'status' => 'failed',
-                'message' => $th->getMessage(),
-            ], 500));
-        }
+        return redirect()->route('admin.index')->with('message', 'Product created successfully');
     }
 
     public function UpdateProductById(UpdateProductRequest $request, int $productId)
     {
-        try {
-            $validated = $request->validated();
+        $validated = $request->validated();
 
-            $product = Product::query()->where('id', $productId)->first();
+        $product = Product::query()->where('id', $productId)->first();
 
-            if ($product->user_id != auth()->id()) {
-                return response()->json([
-                    'status' => 'failed',
-                    'message' => "you have no right to change someone else's product",
-                ], 403);
-            }
-
-            $product->update($validated);
-
-            return response()->json([
-                'status' => 'success',
-                'data' => $product,
-                'message' => 'post succefully updated'
-            ], 200);
-        } catch (\Throwable $th) {
-            throw new HttpResponseException(response()->json([
-                'status' => 'failed',
-                'message' => $th->getMessage(),
-            ], 500));
+        if ($product->user_id != auth()->id()) {
+            return redirect()->route('admin.index')->withErrors('message', "you have no right to delete someone else's product");
         }
+
+        $product->update($validated);
+
+        return redirect()->route('admin.index')->with('message', "you update product succefully");
     }
 
     public function DeleteProductById(int $productId)
     {
-        try {
-            $product = Product::query()->where('id', $productId)->first();
+        $product = Product::query()->where('id', $productId)->first();
 
-            if ($product->user_id != auth()->id()) {
-                return response()->json([
-                    'status' => 'failed',
-                    'message' => "you have no right to change someone else's product",
-                ], 403);
-            }
-
-            $product->delete();
-
-            return response()->json('', 204);
-        } catch (\Throwable $th) {
-            throw new HttpResponseException(response()->json([
-                'status' => 'failed',
-                'message' => $th->getMessage(),
-            ], 500));
+        if ($product->user_id != auth()->id()) {
+            return redirect()->route('admin.index')->withErrors('message', "you have no right to change someone else's product");
         }
+
+        $product->delete();
+
+        return redirect()->route('admin.index')->with('message', "you delete product succefully");
     }
 }
